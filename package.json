@@ -27,6 +27,9 @@
   "scripts": {
     "test": "grunt coverage"
   },
+  "dependencies": {
+    "phantom": "~0.5.4"
+  },
   "devDependencies": {
     "coveralls": "~2.8.0",
     "grunt": "~0.4.2",
