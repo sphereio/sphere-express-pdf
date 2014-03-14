@@ -1,15 +1,22 @@
-# sphere-node-pdf
+# express-pdf
 
- [![Build Status](https://secure.travis-ci.org/emmenko/sphere-node-pdf.png?branch=master)](http://travis-ci.org/emmenko/sphere-node-pdf) [![Coverage Status](https://coveralls.io/repos/emmenko/sphere-node-pdf/badge.png?branch=master)](https://coveralls.io/r/emmenko/sphere-node-pdf?branch=master) [![Dependency Status](https://david-dm.org/emmenko/sphere-node-pdf.png?theme=shields.io)](https://david-dm.org/emmenko/sphere-node-pdf) [![devDependency Status](https://david-dm.org/emmenko/sphere-node-pdf/dev-status.png?theme=shields.io)](https://david-dm.org/emmenko/sphere-node-pdf#info=devDependencies)
+Run a Restlet webserver to generate PDFs from HTML, using phantom.js
 
-The best project ever.
+> Inspired from [html2pdf.it](https://github.com/emmenko/html2pdf.it)
 
 ## Getting Started
-Install the module with: `npm install sphere-node-pdf`
+Install the module with: `npm install express-pdf`
 
-```javascript
-var sphere_node_pdf = require('sphere-node-pdf');
-sphere_node_pdf.awesome(); // "awesome"
+> Make sure to have [phantom.js](http://phantomjs.org/) installed
+
+```bash
+$ brew install phantom
+```
+
+Start the webserver
+
+```bash
+$ grunt run
 ```
 
 ## Documentation
