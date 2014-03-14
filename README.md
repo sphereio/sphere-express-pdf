@@ -20,7 +20,55 @@ $ grunt run
 ```
 
 ## Documentation
-_(Coming soon)_
+The webserver started by express.js offers some JSON endpoints to work with PDFs.
+There are 2 basic principles regarding the endpoints:
+
+- `POST` some data which will be used to generate a PDF
+- `GET` the generated PDF in different ways
+
+### Request body
+```javascript
+// defaults
+{
+  "paperSize": {
+    "format": "A4", // possible values ['A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid']
+    "orientation": "portrait", // possible values ['portrait', 'landscape']
+    "border": "1cm", // possible units ['mm', 'cm', 'in', 'px']
+  },
+  "content": "", // an HTML string with Handlebars template syntax
+  "context": {}, // a JSON object used to pass as context in the template
+  "download": false // true if the url link should trigger a PDF download, otherwise it will be rendered in the browser
+}
+```
+
+### API
+
+##### POST `/api/pdf/url`
+Will generate a PDF based on the given `paylod` data and returns a JSON with a
+link to the PDF.
+> Note that the link will expire after some time
+
+```javascript
+// response
+{
+  status: 200,
+  expires_in: '',
+  url: 'http://localhost:3000/api/pdf/render/1234567890.pdf'
+}
+```
+
+##### POST `/api/pdf/render`
+Will generate a PDF based on the given `paylod` data and render it in the browser
+
+##### POST `/api/pdf/download`
+Will generate a PDF based on the given `paylod` data and download it
+
+##### GET `/api/pdf/render/:token`
+Will render in the browser the generated PDF, if the token is still valid
+
+##### GET `/api/pdf/download/:token`
+Will download the generated PDF, if the token is still valid
+
 
 ## Examples
 _(Coming soon)_

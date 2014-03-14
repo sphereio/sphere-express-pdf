@@ -14,11 +14,12 @@ class Pdf
 
   constructor: (options = {}) ->
     @_options = _.defaults options,
-      paperFormat: 'A4'
-      orientation: 'portrait'
-      margin: '1cm'
-      header: ''
-      footer: ''
+      paperSize:
+        format: 'A4'
+        orientation: 'portrait'
+        border: '1cm'
+      # header: ''
+      # footer: ''
       content: ''
       context: {}
 
