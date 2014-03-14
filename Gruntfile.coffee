@@ -68,6 +68,8 @@ module.exports = (grunt) ->
         stdout: true
         stderr: true
         failOnError: true
+      run:
+        command: 'npm start'
       coverage:
         command: 'istanbul cover jasmine-node --captureExceptions test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
       jasmine:
@@ -99,7 +101,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-shell'
 
   # register tasks
-  grunt.registerTask 'default', ['build']
+  grunt.registerTask 'default', ['run']
+  grunt.registerTask 'run', ['build', 'shell:run']
   grunt.registerTask 'build', ['clean', 'coffeelint', 'coffee', 'concat']
   grunt.registerTask 'test', ['build', 'shell:jasmine']
   grunt.registerTask 'coverage', ['build', 'shell:coverage']
