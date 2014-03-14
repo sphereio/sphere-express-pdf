@@ -1,17 +1,39 @@
-phantom = require 'phantom'
-fs = require 'fs'
+express = require 'express'
 
-path = "#{__dirname}/../data/return.html"
+path = require 'path'
+express = require 'express'
+# middleware = require './middleware'
 
-phantom.create (ph) ->
-  ph.createPage (page) ->
-    console.log path
-    fs.readFile path, 'utf-8', (err, data) ->
-      page.set 'paperSize',
-        format: 'A4'
-        orientation: 'portrait'
-        border: '1cm'
-      page.setContent data, '', (status) ->
-        console.log status
-        page.render './tmp/file.pdf'
-        ph.exit()
+port = switch process.env.NODE_ENV
+  when 'production' then 8888
+  else 3000
+app = express()
+
+###*
+ * Configure express application
+ * - domain: allows to group operations and capture all errors in that contex (http://nodejs.org/api/domain.html)
+ * - logger: logs every request
+ * - router: setup routes
+ * - compress: compress response data with gzip / deflate
+ * - error handlers
+ * @return {[type]} [description]
+###
+app.configure ->
+  # app.use middleware.domain() # we can enable this later
+  app.use express.logger()
+  app.use app.router
+  app.use express.compress()
+  app.use (err, req, res, next) ->
+    # TODO: use logger
+    console.error err.stack
+    # TODO: use JSON response
+    res.send 500, 'Something broke!'
+
+# require('./ws/pdf')(app)
+require('./routes')(app)
+
+app.listen port
+console.log "Listening on http://localhost:#{port}/"
+
+module.exports =
+  app: app

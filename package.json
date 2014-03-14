@@ -28,7 +28,9 @@
     "test": "grunt coverage"
   },
   "dependencies": {
-    "phantom": "~0.5.4"
+    "express": "~3.4.8",
+    "phantom": "~0.5.4",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "coveralls": "~2.8.0",
