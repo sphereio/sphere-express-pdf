@@ -56,12 +56,22 @@ module.exports = (grunt) ->
 
     # watching for changes
     watch:
-      default:
-        files: ['src/coffee/*.coffee']
-        tasks: ['build']
+      run:
+        files: ['Gruntfile.coffee', 'src/**/*.coffee']
+        tasks: ['build', 'express']
+        options:
+          spawn: false # Without this option specified express won't be reloaded
       test:
         files: ['src/**/*.coffee']
         tasks: ['test']
+
+    express:
+      options:
+        port: 3000
+        showStack: true
+      default:
+        options:
+          script: "lib/app.js"
 
     shell:
       options:
@@ -98,6 +108,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-express-server'
   grunt.loadNpmTasks 'grunt-shell'
 
   # register tasks
