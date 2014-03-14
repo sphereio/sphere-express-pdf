@@ -33,10 +33,7 @@ class Pdf
       ph.createPage (page) =>
         console.log html_file
         fs.readFile html_file, 'utf-8', (err, data) =>
-          page.set 'paperSize',
-            format: @_options.paperFormat
-            orientation: @_options.orientation
-            border: @_options.margin
+          page.set 'paperSize', @_options.paperSize
           page.setContent data, '', (status) ->
             console.log status
             page.render tmpFilePath, ->

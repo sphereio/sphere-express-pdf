@@ -1,0 +1,61 @@
+{
+  "paperSize": {
+    "format": "A4",
+    "orientation": "portrait",
+    "border": "1cm",
+  },
+  "content": "<html>\n  <head>\n    <meta charset=\"utf-8\">\n    <title>A PDF page</title>\n\n    <style type=\"text/css\">\n      html { width: 680px; padding: 30px; }\n      body { font-family: \"Helvetica New\", Helvetica, Arial, sans-serif; font-size: 12px; }\n      img { width: 100%; }\n      h1 { text-transform: uppercase; font-weight: 400; font-size: 16px; }\n      table { border-collapse: collapse; border-spacing: 0; }\n      td, th { display: table-cell; padding: 8px; line-height: 20px; text-align: left; font-size: 12px; vertical-align: top; }\n      ul { margin: 0; padding: 0; list-style: none; }\n      .pull-left { float: left; }\n      .pull-right { float: right; }\n      .clearfix { overflow: auto; width: 100% }\n      .center { text-align: center; }\n      .logo { width: 250px; margin-bottom: 50px; }\n      .header p { font-size: 12px; }\n      .header .pull-right, .addresses .pull-right { width: 40%; }\n      .shipping-info { margin: 0; margin-top: 1.5em; padding: 0; list-style: none; }\n      .shipping-info li { margin-bottom: 3px; }\n      .addresses { margin: 50px 0; }\n      .addresses .pull-right .address-title { border-top: 2px solid #A0B2C8; }\n      .address-title { font-weight: bold; margin-bottom: 10px; padding-top: 15px; }\n      .address { line-height: 15px; }\n      .with-border { border: 2px solid #A0B2C8; padding: 20px; }\n      .order-info { padding-left: 0; padding-right: 0; }\n      .order-info ul li { display: inline-block; text-align: center; width: 33%; }\n      .order-info ul li p.title { font-weight: bold; text-transform: none; font-size: 12px; }\n      .order-info ul li p { font-size: 10px; }\n      .warning { font-weight: bold; font-size: 14px; text-transform: uppercase; margin: 50px 0; }\n      .line-items { margin: 50px 0; width: 100%; }\n      .line-items thead th { border-bottom: 1px solid #000; padding-bottom: 20px; }\n      .line-items tbody td { font-weight: 300; }\n      .line-items tbody tr:first-child td { padding-top: 20px; }\n      .return-reason { min-height: 100px; margin-bottom: 50px; }\n      .return-reason > ul { margin: 20px 0; }\n      .return-reason .reason-column { display: inline-block; vertical-align: top; width: 33%; }\n      .return-reason .reason-column li { margin-bottom: 20px; }\n      footer { font-size: 10px; }\n      footer ul li { display: inline-block; width: 33%; }\n      footer ul li div { padding-right: 20px; }\n    </style>\n  </head>\n  <body>\n    <div class=\"logo\">\n      <img src=\"https://s3-eu-west-1.amazonaws.com/public-photos-dp47/RGB_Department47_final.png\">\n    </div>\n    <div class=\"header clearfix\">\n      <div class=\"pull-left\">\n        <h1>Retourenschein</h1>\n        <p>\n          Department47 GmbH\n          <br>\n          Paul-Lincke-Ufer 39-40 10999 Berlin\n        </p>\n      </div>\n      <div class=\"pull-right\">\n        <ul class=\"shipping-info\">\n          <li>Versandnummer: ???</li>\n          <li>Versanddatum: ???</li>\n          <li>Versandart: ???</li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"addresses clearfix\">\n      <div class=\"pull-left\">\n        <div class=\"address-title\">An:</div>\n        <div class=\"address\">\n          {{#if order.shippingAddress.company}}{{order.shippingAddress.company}}<br>{{/if}}\n          {{order.shippingAddress.lastName}} {{order.shippingAddress.firstName}}<br>\n          {{order.shippingAddress.streetName}} {{order.shippingAddress.streetNumber}}<br>\n          {{order.shippingAddress.postalCode}} {{order.shippingAddress.city}}<br>\n          {{order.shippingAddress.country}}\n        </div>\n      </div>\n      <div class=\"pull-right\">\n        <div class=\"address-title\">Von:</div>\n        <div class=\"address\">\n          Shop name/company<br>\n          Address strasse 47<br>\n          71679 Munich<br>\n          DE\n        </div>\n      </div>\n    </div>\n    <div class=\"order-info with-border\">\n      <ul>\n        <li>\n          <p class=\"title\">Kunde:</p>\n          <p>{{order.customerEmail}}</p>\n        </li>\n        <li>\n          <p class=\"title\">Bestellnummer:</p>\n          <p>{{ternary order.orderNumber order.id}}</p>\n        </li>\n        <li>\n          <p class=\"title\">Bestelldatum:</p>\n          <p>{{formatDate order.createdAt 'DD.MM.YYYY'}}</p>\n        </li>\n      </ul>\n    </div>\n    <p class=\"warning center\">\n      Bitte beachten sie, dass eine eventuelle Rücksendung an name/company erfolgen muss.<br>\n      Ihrer Lieferung liegen ein Retourenschein und ein Rücksendeaufkleber für den Rückversandt durch UPS bei. Bitte geben Sie auf dem Retourenschein den jeweiligen Grund für die Rücksendung an und kleben Sie den Rücksendeaufkleber auf das Paket.\n    </p>\n    <p class=\"center\">Wenn Sie den Artikel umtauschen möchten, bestellen Sie bitte anschließend Ihren neuen Wunschartikel auf department47.de</p>\n    <table class=\"line-items\">\n      <thead>\n        <tr>\n          <th>Artikelnummer</th>\n          <th>Partnernummer</th>\n          <th>Bezeichnung</th>\n          <th>Anzahl</th>\n          <th>Gr.</th>\n          <th>Grund</th>\n        </tr>\n      </thead>\n      <tbody>\n        {{#each delivery.items}}\n        <tr>\n          <td>{{lineItem.variant.sku}}</td>\n          <td>???</td><!-- partner number is defined in project_key (e.g. d47-par-1234 => 1234) -->\n          <td>{{valueKey name 'de' true}}</td>\n          <td>{{quantity}}</td>\n          <td>\n            {{#findBy lineItem.variant.attributes 'name' 'size'}}\n              {{valueKey value 'de' true}}\n            {{else}}\n              n/a\n            {{/findBy}}\n          </td>\n          <td>___</td>\n        </tr>\n        {{/each}}\n      </tbody>\n    </table>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <br>\n    <div class=\"return-reason with-border\">\n      <strong>Retourengründe:</strong>\n      <ul>\n        <li class=\"reason-column\">\n          <ul>\n            <li><strong>1.</strong> Artikel gefällt mir nicht</li>\n            <li><strong>2.</strong> Artikel ist mir zu groß</li>\n            <li><strong>3.</strong> Artikel ist mir zu klein</li>\n          </ul>\n        </li>\n        <li class=\"reason-column\">\n          <ul>\n            <li><strong>4.</strong> Preis -Leistungs-Verhältnis</li>\n            <li><strong>5.</strong> Lieferung zu spät</li>\n            <li><strong>6.</strong> anders als dargestellt</li>\n          </ul>\n        </li>\n        <li class=\"reason-column\">\n          <ul>\n            <li><strong>7.</strong> falscher Artikel</li>\n            <li><strong>8.</strong> defekter Artikel</li>\n          </ul>\n        </li>\n      </ul>\n      <strong>Falls Artikel defekt: wo befindet sich der Defekt? (erforderlich): ____________________________________</strong>\n    </div>\n    <footer>\n      <ul>\n        <li>\n          <div>\n            Department47 GmbH<br>\n            Paul-Lincke-Ufer 39-40 10999 Berlin<br>\n            Geschäftsführer: Uli Erxleben, Mato Peric, Dr. Christian Wegner\n          </div>\n        </li>\n        <li>\n          <div>\n            Tel: 0800 411 41 42<br>\n            service@department47.de\n          </div>\n        </li>\n        <li>\n          <div>\n            Registergericht:<br>\n            Berlin-Charlottenburg, HRB 154372<br>\n            Ust-IdNr. DE292082788\n          </div>\n        </li>\n      </ul>\n    </footer>\n  </body>\n</html>\n",
+  "context": {
+    "order": {
+      "type": "Order",
+      "id": "2f3ca417-daab-42e6-9b0b-55a6ae2e0df3",
+      "version": 27,
+      "orderNumber": "1234567890",
+      "customerEmail": "jskeet1372250901995@google.com",
+      "createdAt": "2013-06-26T12:48:22.086Z",
+      "shippingAddress": {
+        "id": "jx5Rozow",
+        "firstName": "Horst",
+        "lastName": "Kasuppe",
+        "streetName": "Ganghoferstr",
+        "streetNumber": "68B",
+        "postalCode": "80339",
+        "city": "München",
+        "region": "Bayern",
+        "country": "DE",
+        "company": "commercetools"
+      },
+    },
+    "delivery": {
+      "createdAt": "2014-01-20T19:18:42.940Z",
+      "items": [
+        {
+          "quantity": 5,
+          "lineItem": {
+            "variant": {
+              "sku": "sku_variant1_1372250899755",
+              "attributes": [
+                {
+                  "name": "size",
+                  "value": {
+                    "de": "L"
+                  }
+                },
+                {
+                  "name": "color",
+                  "value": {
+                    "de": "Rot"
+                  }
+                }
+              ]
+            }
+            "name": {
+              "de": "Shirt"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "download": false
+}
