@@ -1,7 +1,6 @@
 express = require 'express'
-
 path = require 'path'
-express = require 'express'
+
 # middleware = require './middleware'
 
 port = switch process.env.NODE_ENV
@@ -29,11 +28,7 @@ app.configure ->
     # TODO: use JSON response
     res.send 500, 'Something broke!'
 
-# require('./ws/pdf')(app)
-require('./routes')(app)
+require('./routes')(app, port)
 
 app.listen port
 console.log "Listening on http://localhost:#{port}/"
-
-module.exports =
-  app: app
