@@ -1,12 +1,16 @@
-express = require 'express'
 path = require 'path'
+express = require 'express'
 
 # middleware = require './middleware'
 
-port = switch process.env.NODE_ENV
+app = express()
+
+env = app.get 'env'
+console.log "Node environment: #{env}"
+
+port = switch env
   when 'production' then 8888
   else 3000
-app = express()
 
 ###*
  * Configure express application
@@ -18,8 +22,14 @@ app = express()
  * @return {[type]} [description]
 ###
 app.configure ->
+  app.set 'port', port
   # app.use middleware.domain() # we can enable this later
   app.use express.logger()
+  app.use express.json()
+  app.use express.urlencoded()
+  app.use express.methodOverride()
+  app.use express.cookieParser('o4i6XvJXjHF1eQfTpE1E')
+  app.use express.session()
   app.use app.router
   app.use express.compress()
   app.use (err, req, res, next) ->
@@ -30,5 +40,11 @@ app.configure ->
 
 require('./routes')(app, port)
 
-app.listen port
-console.log "Listening on http://localhost:#{port}/"
+
+# only start the server if the file is run directly, not when it is required
+if __filename is process.argv[1]
+  app.listen port
+  console.log "Listening on http://localhost:#{port}/"
+
+
+module.exports = app

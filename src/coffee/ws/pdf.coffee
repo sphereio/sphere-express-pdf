@@ -1,4 +1,5 @@
 _ = require 'underscore'
+hb = require 'handlebars'
 fs = require 'fs'
 path = require 'path'
 phantom = require 'phantom'
@@ -6,9 +7,6 @@ phantom = require 'phantom'
 FORMATS = ['A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid']
 ORIENTATIONS = ['portrait', 'landscape']
 MARGIN_REGEX = /^\d+(in|cm|mm)$/
-
-html_file = path.join(__dirname, '../../data', 'return.html')
-
 
 class Pdf
 
@@ -29,10 +27,13 @@ class Pdf
     tmpFileName = "#{timestamp}.pdf"
     tmpFilePath = path.join(__dirname, '../../tmp', "#{tmpFileName}.pdf")
 
+    # compile
+    html = hb.compile(@_options.content)(@_options.context)
+
     phantom.create (ph) =>
       ph.createPage (page) =>
-        console.log html_file
-        fs.readFile html_file, 'utf-8', (err, data) =>
+        console.log html
+        fs.readFile html, 'utf-8', (err, data) =>
           page.set 'paperSize', @_options.paperSize
           page.setContent data, '', (status) ->
             console.log status

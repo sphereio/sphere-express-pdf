@@ -17,7 +17,8 @@ module.exports = (app, port) ->
     # - respond with JSON containing link to PDF
 
     # options from request body
-    pdf = new Pdf()
+    console.log req.body
+    pdf = new Pdf req.body
     pdf.generate (tmpFileName) ->
       res.json
         status: 200
