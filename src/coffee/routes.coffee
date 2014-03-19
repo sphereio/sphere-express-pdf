@@ -17,7 +17,6 @@ module.exports = (app, port) ->
     # - respond with JSON containing link to PDF
 
     # options from request body
-    console.log req.body
     pdf = new Pdf req.body
     pdf.generate (tmpFileName) ->
       res.json

@@ -19,7 +19,6 @@ port = switch env
  * - router: setup routes
  * - compress: compress response data with gzip / deflate
  * - error handlers
- * @return {[type]} [description]
 ###
 app.configure ->
   app.set 'port', port
