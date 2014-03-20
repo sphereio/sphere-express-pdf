@@ -21,6 +21,7 @@ class Pdf
       # footer: ''
       content: ''
       context: {}
+      download: false
 
   generate: (ph, cb) ->
     # generate random name / token

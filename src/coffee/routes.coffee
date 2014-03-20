@@ -33,18 +33,17 @@ module.exports = (app, port) ->
 
   # retrieve a link to the generated pdf
   app.post '/api/pdf/url', (req, res, next) ->
-    # - generate pdf
-    # - respond with JSON containing link to PDF
-
-    # options from request body
     pdf = new Pdf req.body
     pdf.generate @_ph, (tmpFileName) ->
+      if pdf._options.download
+        renderOrDownload = 'download'
+      else
+        renderOrDownload = 'render'
       res.json
         status: 200
         expires_in: '???'
-        # TODO: check whether it should render or download
         # TODO: define baseUrl pro environment
-        url: "#{baseUrl}/api/pdf/render/#{tmpFileName}"
+        url: "#{baseUrl}/api/pdf/#{renderOrDownload}/#{tmpFileName}"
 
   # generate and render pdf in the browser
   app.get '/api/pdf/render/:token', (req, res, next) ->

@@ -49,6 +49,7 @@
     "grunt-shell": "~0.6.4",
     "istanbul": "~0.2.6",
     "jasmine-node": "~1.13.1",
+    "request": "~2.34.0",
     "sphere-coffeelint": "git://github.com/sphereio/sphere-coffeelint.git#master"
   },
   "keywords": [
