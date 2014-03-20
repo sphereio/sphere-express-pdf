@@ -1,23 +1,12 @@
 fs = require 'fs'
 path = require 'path'
 Pdf = require '../lib/ws/pdf'
+testData = require '../data/test.json'
 
 describe 'Pdf generator', ->
 
-  beforeEach (done) ->
+  beforeEach ->
     @expectedPath = null
-    templatePath = path.join(__dirname, '../data', 'test-template.html')
-    fs.readFile templatePath, 'utf-8', (err, data) =>
-      @body =
-        paperSize:
-          format: 'A4'
-          orientation: 'portrait'
-          border: '1cm'
-        content: data
-        context:
-          title: 'Hello world'
-        download: false
-      done()
 
   afterEach (done) ->
     fs.unlink @expectedPath, (err) ->
@@ -27,7 +16,7 @@ describe 'Pdf generator', ->
         done()
 
   it 'should generate pdf', (done) ->
-    pdf = new Pdf @body
+    pdf = new Pdf testData
     pdf.generate (tmpFileName) =>
       @expectedPath = path.join(__dirname, '../tmp', "#{tmpFileName}.pdf")
       fs.readFile @expectedPath, 'utf-8', (err, data) ->
