@@ -1,7 +1,6 @@
 _ = require 'underscore'
 fs = require 'fs'
 path = require 'path'
-phantom = require 'phantom'
 Handlebars = require 'handlebars'
 
 FORMATS = ['A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid']
@@ -23,7 +22,7 @@ class Pdf
       content: ''
       context: {}
 
-  generate: (cb) ->
+  generate: (ph, cb) ->
     # generate random name / token
     timestamp = new Date().getTime()
     tmpFileName = "#{timestamp}.pdf"
@@ -32,14 +31,18 @@ class Pdf
     # compile
     html = Handlebars.compile(@_options.content)(@_options.context)
 
-    phantom.create (ph) =>
+    @_page = null
+    try
       ph.createPage (page) =>
+        @_page = page
         page.set 'paperSize', @_options.paperSize
         page.setContent html, '', (status) ->
           console.log status
           page.render tmpFilePath, ->
             page.close()
-            ph.exit()
             cb(tmpFileName)
+    catch e
+      @_page?.close()
+      throw new Error e
 
 module.exports = Pdf

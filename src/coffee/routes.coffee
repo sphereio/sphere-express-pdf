@@ -1,4 +1,5 @@
 _ = require 'underscore'
+phantom = require 'phantom'
 pkg = require '../package.json'
 Pdf = require './ws/pdf'
 
@@ -6,19 +7,33 @@ module.exports = (app, port) ->
 
   baseUrl = "http://localhost:#{port}"
 
+  process.on 'exit', =>
+    console.log 'Cleaning phantom process'
+    @_ph?.exit()
+
+  app.all '*', (req, res, next) ->
+    req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
+    if @_ph
+      console.log 'Phantom process already running, skipping...'
+      next()
+    else
+      phantom.create "--web-security=no", "--ignore-ssl-errors=yes", {}, (ph) =>
+        @_ph = ph
+        console.log 'New phantom process created'
+        next()
+
   # homepage
   app.get '/', (req, res, next) ->
     res.json _.omit pkg, 'devDependencies'
 
   # retrieve a link to the generated pdf
   app.post '/api/pdf/url', (req, res, next) ->
-    req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
     # - generate pdf
     # - respond with JSON containing link to PDF
 
     # options from request body
     pdf = new Pdf req.body
-    pdf.generate (tmpFileName) ->
+    pdf.generate @_ph, (tmpFileName) ->
       res.json
         status: 200
         expires_in: '???'
