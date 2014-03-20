@@ -8,7 +8,7 @@ after_script:
 notifications:
   hipchat:
     rooms:
-      - secure: eEBS/HXAt9w66z4PMJo+mBjBJ6mJJnWHJAthC9UmHmd05SVC+V2mcvwa9rIfQHtphKK1pk47pH5opyaxhaNqLMf1u7oUKBRFeP8tWidzKTcIqoS0YpXnN0IgcoutYb3xI+BXOavkfTg96aC2Rh40BSqcErSNQ5lTE9brcRLpkg0=
+      - secure: MCy/NKTTKlQmeTlu4zYoq2sXd06gdq9o1uwAwhqkfikL7VVkK2aCljBXAzAGt103U97ADIg7vPu2YVjCRVHRu6Ix6f0LIZKw5DPiNGxU1DUZsf5Yn4O7eahSnUittAjlzHyRjJBFn/LdQB5aQ93JwpESPvwv6ct1wUroMQZbTp0=
     template:
       - '%{repository}#%{build_number} (%{author}): %{message} (<a href="%{build_url}">Details</a> / <a href="%{compare_url}">Compare</a>)'
     format: html

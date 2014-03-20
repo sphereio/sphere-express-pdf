@@ -16,7 +16,7 @@ describe 'Functional Spec', ->
           else
             expect(r.statusCode).toBe 200
             expect(r.headers['content-type']).toBe 'application/json; charset=utf-8'
-            expect(b.name).toBe 'express-pdf'
+            expect(b.name).toBe 'sphere-express-pdf'
             done()
 
   describe ':: POST /api/pdf/url', ->

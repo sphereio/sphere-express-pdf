@@ -1,11 +1,11 @@
-# express-pdf
+# sphere-express-pdf
 
 Run a Restlet webserver to generate PDFs from HTML, using phantom.js
 
 > Inspired from [html2pdf.it](https://github.com/emmenko/html2pdf.it)
 
 ## Getting Started
-Install the module with: `npm install express-pdf`
+Install the module with: `npm install sphere-express-pdf`
 
 > Make sure to have [phantom.js](http://phantomjs.org/) installed
 
