@@ -8,7 +8,9 @@ describe 'Pdf generator', ->
 
   beforeEach (done) ->
     @expectedPath = null
-    phantom.create (ph) =>
+    phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
+      port: 1111
+    , (ph) =>
       @_ph = ph
       done()
 

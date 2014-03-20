@@ -18,9 +18,13 @@ module.exports = (app, port) ->
       console.log 'Phantom process already running, skipping...'
       next()
     else
-      phantom.create "--web-security=no", "--ignore-ssl-errors=yes", {}, (ph) =>
+      phantomOpts =
+        port: (port - 1)
+      phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
+        phantomOpts
+      , (ph) =>
         @_ph = ph
-        console.log 'New phantom process created'
+        console.log "New phantom process created on port #{phantomOpts.port}"
         next()
 
   # homepage
