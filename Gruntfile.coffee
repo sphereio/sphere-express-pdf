@@ -41,6 +41,14 @@ module.exports = (grunt) ->
           rename: (dest, matchedSrcPath) ->
             dest + matchedSrcPath
           )
+      testHelpers:
+        files: grunt.file.expandMapping(['**/*Helper.coffee'], 'test/',
+          flatten: false
+          cwd: 'src/spec'
+          ext: '.js'
+          rename: (dest, matchedSrcPath) ->
+            dest + matchedSrcPath
+          )
 
     concat:
       options:
@@ -113,7 +121,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['run']
   grunt.registerTask 'run', ['build', 'express', 'watch:run']
   grunt.registerTask 'build', ['clean', 'coffeelint', 'coffee', 'concat']
-  grunt.registerTask 'test', ['build', 'shell:jasmine']
+  grunt.registerTask 'test', ['build', 'express', 'shell:jasmine']
   grunt.registerTask 'coverage', ['build', 'shell:coverage']
   grunt.registerTask 'release', 'Release a new version, push it and publish it', (target) ->
     target = 'patch' unless target
