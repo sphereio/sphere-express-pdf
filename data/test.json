@@ -4,9 +4,10 @@
     "orientation": "portrait",
     "border": "1cm"
   },
-  "content": "<html>\n  <head>\n    <meta charset=\"utf-8\">\n    <title>A test PDF page</title>\n    <style type=\"text/css\">\n      html { width: 680px; padding: 30px; }\n      body { font-family: \"Helvetica New\", Helvetica, Arial, sans-serif; font-size: 12px; }\n      img { width: 100%; }\n      h1 { text-transform: uppercase; font-weight: 400; font-size: 16px; }\n    </style>\n  </head>\n  <body>\n    <h1>{{title}}</h1>\n  </body>\n</html>\n",
+  "content": "<html>\n  <head>\n    <meta charset=\"utf-8\">\n    <title>A test PDF page</title>\n    <style type=\"text/css\">\n      html { width: 680px; padding: 30px; }\n      body { font-family: \"Helvetica New\", Helvetica, Arial, sans-serif; font-size: 12px; }\n      img { width: 100%; }\n      h1 { text-transform: uppercase; font-weight: 400; font-size: 16px; }\n    </style>\n  </head>\n  <body>\n    <h1>{{title}}</h1>\n <h2>{{formatDate createdAt}}</h2>\n  </body>\n</html>\n",
   "context": {
-    "title": "Hello world"
+    "title": "Hello world",
+    "createdAt": "2014-01-20T19:18:42.940Z"
   },
   "download": false
 }
