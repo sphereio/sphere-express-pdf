@@ -10,7 +10,7 @@ console.log "Node environment: #{env}"
 
 port = switch env
   when 'production' then 8888
-  else 3000
+  else 3999
 
 ###*
  * Configure express application
@@ -39,11 +39,14 @@ app.configure ->
 
 require('./routes')(app, port)
 
-
 # only start the server if the file is run directly, not when it is required
 if __filename is process.argv[1]
-  app.listen port
+  server = app.listen port
   console.log "Listening on http://localhost:#{port}/"
 
+process.on 'SIGINT', ->
+  console.log 'Attempting gracefully shutdown of server'
+  server?.close()
+  process.exit()
 
 module.exports = app

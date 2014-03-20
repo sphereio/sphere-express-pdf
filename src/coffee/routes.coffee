@@ -7,12 +7,13 @@ module.exports = (app, port) ->
 
   baseUrl = "http://localhost:#{port}"
 
-  process.on 'exit', =>
+  process.on 'exit', (a, b) =>
     console.log 'Cleaning phantom process'
     @_ph?.exit()
+    process.exit()
 
   app.all '*', (req, res, next) ->
-    req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
+    # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
     if @_ph
       console.log 'Phantom process already running, skipping...'
       next()

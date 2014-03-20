@@ -16,7 +16,9 @@ $ brew install phantom
 Start the webserver
 
 ```bash
-$ grunt run
+$ npm start
+# or
+$ grunt run # will watch for changes and keep the server alive
 ```
 
 ## Documentation
