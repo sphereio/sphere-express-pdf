@@ -52,8 +52,8 @@ module.exports = (app, port) ->
 
   # generate and render pdf in the browser
   app.post '/api/pdf/render', (req, res, next) ->
-    res.send 401,
-      message: 'Not authorized'
+    res.send 501,
+      message: 'Endpoint not implemented yet'
     # - generate pdf
     # - respond with pdf
 
@@ -64,7 +64,7 @@ module.exports = (app, port) ->
 
   # generate and download pdf
   app.post '/api/pdf/download', (req, res, next) ->
-    res.send 401,
-      message: 'Not authorized'
+    res.send 501,
+      message: 'Endpoint not implemented yet'
     # - generate pdf
     # - respond with download

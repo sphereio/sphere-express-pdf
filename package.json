@@ -50,7 +50,8 @@
     "istanbul": "~0.2.6",
     "jasmine-node": "~1.13.1",
     "request": "~2.34.0",
-    "sphere-coffeelint": "git://github.com/sphereio/sphere-coffeelint.git#master"
+    "sphere-coffeelint": "git://github.com/sphereio/sphere-coffeelint.git#master",
+    "uuid": "~1.4.1"
   },
   "keywords": [
     "html",
