@@ -16,10 +16,40 @@ module.exports = (app, port) ->
     res.send 404,
       message: 'File not found'
 
+  createPdf = (payload, cb) ->
+    pdf = new Pdf payload
+    pdf.generate @_ph, (tmpFileName) ->
+      if pdf._options.download
+        renderOrDownload = 'download'
+      else
+        renderOrDownload = 'render'
+      cb(tmpFileName, renderOrDownload)
+
+  loadPdf = (fileName, res, cb) ->
+    requestedPath = filePath(fileName)
+    fs.readFile requestedPath, (err, data) ->
+      if err
+        notFound(err, res)
+      else
+        cb(data)
+
+  renderPdf = (fileName, res) ->
+    loadPdf fileName, res, (data) ->
+      res.type 'application/pdf'
+      res.send data
+
+  downloadPdf = (fileName, res) ->
+    loadPdf fileName, res, (data) ->
+      res.download filePath(fileName), fileName
+
   process.on 'exit', (a, b) =>
     console.log 'Cleaning phantom process'
     @_ph?.exit()
     process.exit()
+
+  process.on 'uncaughtException', (err) ->
+    console.error err.stack
+    process.exit(1)
 
   app.all '*', (req, res, next) ->
     # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
@@ -42,12 +72,7 @@ module.exports = (app, port) ->
 
   # retrieve a link to the generated pdf
   app.post '/api/pdf/url', (req, res, next) ->
-    pdf = new Pdf req.body
-    pdf.generate @_ph, (tmpFileName) ->
-      if pdf._options.download
-        renderOrDownload = 'download'
-      else
-        renderOrDownload = 'render'
+    createPdf req.body, (tmpFileName, renderOrDownload) ->
       res.json
         status: 200
         expires_in: '???'
@@ -57,34 +82,18 @@ module.exports = (app, port) ->
 
   # render existing pdf in the browser
   app.get '/api/pdf/render/:token', (req, res, next) ->
-    requestedPath = filePath(req.param('token'))
-    fs.readFile requestedPath, (err, data) ->
-      if err
-        notFound(err, res)
-      else
-        res.type 'application/pdf'
-        res.send data
+    renderPdf(req.param('token'), res)
 
   # download existing pdf
   app.get '/api/pdf/download/:token', (req, res, next) ->
-    fileName = req.param('token')
-    requestedPath = filePath(fileName)
-    fs.readFile requestedPath, (err, data) ->
-      if err
-        notFound(err, res)
-      else
-        res.download requestedPath, fileName
+    downloadPdf(req.param('token'), res)
 
   # generate and render pdf in the browser
   app.post '/api/pdf/render', (req, res, next) ->
-    res.send 501,
-      message: 'Endpoint not implemented yet'
-    # - generate pdf
-    # - respond with pdf
+    createPdf req.body, (tmpFileName) ->
+      renderPdf(tmpFileName, res)
 
   # generate and download pdf
   app.post '/api/pdf/download', (req, res, next) ->
-    res.send 501,
-      message: 'Endpoint not implemented yet'
-    # - generate pdf
-    # - respond with download
+    createPdf req.body, (tmpFileName) ->
+      downloadPdf(tmpFileName, res)

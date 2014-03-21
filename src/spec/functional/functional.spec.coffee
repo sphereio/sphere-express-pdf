@@ -72,21 +72,22 @@ describe 'Functional Spec', ->
   describe ":: POST /api/pdf/render", ->
 
     it 'should return endpoint not implemented', (done) ->
-      helper.http.post '/api/pdf/render', {}
+      helper.http.post '/api/pdf/render', testData
       .then (result) ->
-        expect(result.response.statusCode).toBe 501
-        expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
-        expect(result.body.message).toBe 'Endpoint not implemented yet'
+        expect(result.response.statusCode).toBe 200
+        expect(result.response.headers['content-type']).toBe 'application/pdf'
+        expect(result.body).toBeDefined()
         done()
       .fail (error) -> done(error)
 
   describe ":: POST /api/pdf/download", ->
 
     it 'should return endpoint not implemented', ->
-      helper.http.post '/api/pdf/download', {}
+      helper.http.post '/api/pdf/download', testData
       .then (result) ->
-        expect(result.response.statusCode).toBe 501
-        expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
-        expect(result.body.message).toBe 'Endpoint not implemented yet'
+        expect(result.response.statusCode).toBe 200
+        expect(result.response.headers['content-type']).toBe 'application/pdf'
+        expect(result.response.headers['content-disposition']).toBe "attachment; filename=\"#{name}\""
+        expect(result.body).toBeDefined()
         done()
       .fail (error) -> done(error)

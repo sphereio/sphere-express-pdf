@@ -13,6 +13,7 @@ class Requester
     d = Q.defer()
     request @options(path, 'GET'), (e, r, b) ->
       if e
+        console.error e
         d.reject e
       else
         d.resolve
@@ -24,6 +25,7 @@ class Requester
     d = Q.defer()
     request _.extend({}, @options(path, 'POST'), {body: body}), (e, r, b) ->
       if e
+        console.error e
         d.reject e
       else
         d.resolve
