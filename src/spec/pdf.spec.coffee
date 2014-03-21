@@ -25,7 +25,7 @@ describe 'Pdf generator', ->
   it 'should generate pdf', (done) ->
     pdf = new Pdf testData
     pdf.generate @_ph, (tmpFileName) =>
-      @expectedPath = path.join(__dirname, '../tmp', "#{tmpFileName}.pdf")
+      @expectedPath = path.join(__dirname, '../tmp', tmpFileName)
       fs.readFile @expectedPath, 'utf-8', (err, data) ->
         if err
           done(err)

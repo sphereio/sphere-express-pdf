@@ -1,3 +1,4 @@
+Q = require 'q'
 _ = require 'underscore'
 request = require 'request'
 
@@ -9,18 +10,27 @@ class Requester
     method: method
 
   get: (path, callback) ->
-    request @options(path, 'GET'), callback
+    d = Q.defer()
+    request @options(path, 'GET'), (e, r, b) ->
+      if e
+        d.reject e
+      else
+        d.resolve
+          response: r
+          body: b
+    d.promise
 
   post: (path, body, callback) ->
-    request _.extend({}, @options(path, 'POST'), {body: body}), callback
+    d = Q.defer()
+    request _.extend({}, @options(path, 'POST'), {body: body}), (e, r, b) ->
+      if e
+        d.reject e
+      else
+        d.resolve
+          response: r
+          body: b
+    d.promise
 
-###
-Mock express server
-###
-exports.withServer = (callback) ->
-  asyncSpecWait()
 
-  stopServer = ->
-    asyncSpecDone()
-
-  callback new Requester, stopServer
+module.exports =
+  http: new Requester

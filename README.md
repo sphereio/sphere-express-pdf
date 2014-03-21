@@ -59,6 +59,7 @@ link to the PDF.
 {
   status: 200,
   expires_in: '',
+  file: '1234567890.pdf',
   url: 'http://localhost:3000/api/pdf/render/1234567890.pdf'
 }
 ```

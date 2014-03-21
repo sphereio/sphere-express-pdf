@@ -27,7 +27,7 @@ class Pdf
     # generate random name / token
     timestamp = new Date().getTime()
     tmpFileName = "#{timestamp}.pdf"
-    tmpFilePath = path.join(__dirname, '../../tmp', "#{tmpFileName}.pdf")
+    tmpFilePath = path.join(__dirname, '../../tmp', tmpFileName)
 
     # compile
     html = Handlebars.compile(@_options.content)(@_options.context)
@@ -36,7 +36,13 @@ class Pdf
     try
       ph.createPage (page) =>
         @_page = page
+        # paperConfig = _.extend {}, @_options.paperSize,
+        #   header:
+        #     height: '1cm'
+        #     contents: '<h1>This is an HEADER</h1>'
+        # console.log paperConfig
         page.set 'paperSize', @_options.paperSize
+
         page.setContent html, '', (status) ->
           console.log status
           page.render tmpFilePath, ->

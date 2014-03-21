@@ -1,4 +1,6 @@
 _ = require 'underscore'
+fs = require 'fs'
+path = require 'path'
 phantom = require 'phantom'
 pkg = require '../package.json'
 Pdf = require './ws/pdf'
@@ -6,6 +8,13 @@ Pdf = require './ws/pdf'
 module.exports = (app, port) ->
 
   baseUrl = "http://localhost:#{port}"
+
+  filePath = (name) -> path.join(__dirname, '../tmp', name)
+
+  notFound = (err, res) ->
+    console.log "File not found: #{err}"
+    res.send 404,
+      message: 'File not found'
 
   process.on 'exit', (a, b) =>
     console.log 'Cleaning phantom process'
@@ -42,13 +51,29 @@ module.exports = (app, port) ->
       res.json
         status: 200
         expires_in: '???'
+        file: tmpFileName
         # TODO: define baseUrl pro environment
         url: "#{baseUrl}/api/pdf/#{renderOrDownload}/#{tmpFileName}"
 
-  # generate and render pdf in the browser
+  # render existing pdf in the browser
   app.get '/api/pdf/render/:token', (req, res, next) ->
-    res.send 501,
-      message: 'Endpoint not implemented yet'
+    requestedPath = filePath(req.param('token'))
+    fs.readFile requestedPath, (err, data) ->
+      if err
+        notFound(err, res)
+      else
+        res.type 'application/pdf'
+        res.send data
+
+  # download existing pdf
+  app.get '/api/pdf/download/:token', (req, res, next) ->
+    fileName = req.param('token')
+    requestedPath = filePath(fileName)
+    fs.readFile requestedPath, (err, data) ->
+      if err
+        notFound(err, res)
+      else
+        res.download requestedPath, fileName
 
   # generate and render pdf in the browser
   app.post '/api/pdf/render', (req, res, next) ->
@@ -56,11 +81,6 @@ module.exports = (app, port) ->
       message: 'Endpoint not implemented yet'
     # - generate pdf
     # - respond with pdf
-
-  # generate and render pdf in the browser
-  app.get '/api/pdf/download/:token', (req, res, next) ->
-    res.send 501,
-      message: 'Endpoint not implemented yet'
 
   # generate and download pdf
   app.post '/api/pdf/download', (req, res, next) ->
