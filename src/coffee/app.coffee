@@ -35,7 +35,8 @@ app.configure ->
     # TODO: use logger
     console.error err.stack
     # TODO: use JSON response
-    res.send 500, 'Something broke!'
+    res.send 500,
+      message: 'Oops, something went wrong!'
 
 require('./routes')(app, port)
 
