@@ -49,6 +49,7 @@ module.exports = (app, port) ->
 
   process.on 'uncaughtException', (err) ->
     console.error err.stack
+    # TODO: should not exit and block thread
     process.exit(1)
 
   app.all '*', (req, res, next) ->
