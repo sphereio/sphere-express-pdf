@@ -1,4 +1,8 @@
-# sphere-express-pdf
+![SPHERE.IO icon](https://admin.sphere.io/assets/images/sphere_logo_rgb_long.png)
+
+# Express PDF
+
+[![Build Status](https://travis-ci.org/sphereio/sphere-express-pdf.svg?branch=master)](https://travis-ci.org/sphereio/sphere-express-pdf) [![Coverage Status](https://coveralls.io/repos/sphereio/sphere-express-pdf/badge.png?branch=master)](https://coveralls.io/r/sphereio/sphere-express-pdf?branch=master) [![Dependency Status](https://david-dm.org/sphereio/sphere-express-pdf.svg?theme=shields.io)](https://david-dm.org/sphereio/sphere-express-pdf) [![devDependency Status](https://david-dm.org/sphereio/sphere-express-pdf/dev-status.svg?theme=shields.io)](https://david-dm.org/sphereio/sphere-express-pdf#info=devDependencies)
 
 Run a Restlet webserver to generate PDFs from HTML, using phantom.js
 
