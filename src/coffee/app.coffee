@@ -23,7 +23,7 @@ logger = new Logger
   name: 'sphere-express-pdf'
   streams: logStream
 
-logger.info "Node environment: #{env}"
+logger.info "Starting express application on port #{port} (#{env})"
 
 ###*
  * Configure express application
@@ -59,12 +59,12 @@ require('./routes')(app, port, ee)
 # only start the server if the file is run directly, not when it is required
 if __filename is process.argv[1]
   server = app.listen port
-  logger.info "Listening on http://localhost:#{port}/"
+  logger.info "Listening for HTTP on http://localhost:#{port}"
 
 ee.on 'tearDown', (ph) ->
-  logger.info 'Cleaning phantom process...'
+  logger.info 'Cleaning phantom process.'
   ph?.exit()
-  logger.info 'Attempting gracefully shutdown of server...'
+  logger.info 'Attempting gracefully shutdown of server.'
   server?.close()
   process.exit()
 
