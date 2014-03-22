@@ -5,7 +5,7 @@ phantom = require 'phantom'
 pkg = require '../package.json'
 Pdf = require './ws/pdf'
 
-module.exports = (app, port) ->
+module.exports = (app, port, ee) ->
 
   baseUrl = "http://localhost:#{port}"
 
@@ -41,16 +41,6 @@ module.exports = (app, port) ->
   downloadPdf = (fileName, res) ->
     loadPdf fileName, res, (data) ->
       res.download filePath(fileName), fileName
-
-  process.on 'exit', (a, b) =>
-    console.log 'Cleaning phantom process'
-    @_ph?.exit()
-    process.exit()
-
-  process.on 'uncaughtException', (err) ->
-    console.error err.stack
-    # TODO: should not exit and block thread
-    process.exit(1)
 
   app.all '*', (req, res, next) ->
     # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
@@ -98,3 +88,7 @@ module.exports = (app, port) ->
   app.post '/api/pdf/download', (req, res, next) ->
     createPdf req.body, (tmpFileName) ->
       downloadPdf(tmpFileName, res)
+
+
+  process.on 'exit', -> ee.emit 'tearDown', @_ph
+  process.on 'SIGINT', -> ee.emit 'tearDown', @_ph

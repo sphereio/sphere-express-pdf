@@ -1,8 +1,8 @@
-path = require 'path'
+EventEmitter = require('events').EventEmitter
+domain = require 'domain'
 express = require 'express'
 
-# middleware = require './middleware'
-
+ee = new EventEmitter()
 app = express()
 
 env = app.get 'env'
@@ -22,7 +22,12 @@ port = switch env
 ###
 app.configure ->
   app.set 'port', port
-  # app.use middleware.domain() # we can enable this later
+  app.use (req, res, next) ->
+    requestDomain = domain.create()
+    requestDomain.add(req)
+    requestDomain.add(res)
+    requestDomain.on 'error', next
+    requestDomain.run(next)
   app.use express.logger()
   app.use express.json()
   app.use express.urlencoded()
@@ -33,20 +38,23 @@ app.configure ->
   app.use express.compress()
   app.use (err, req, res, next) ->
     # TODO: use logger
+    console.log 'Caught exception'
     console.error err.stack
     # TODO: use JSON response
     res.send 500,
       message: 'Oops, something went wrong!'
 
-require('./routes')(app, port)
+require('./routes')(app, port, ee)
 
 # only start the server if the file is run directly, not when it is required
 if __filename is process.argv[1]
   server = app.listen port
   console.log "Listening on http://localhost:#{port}/"
 
-process.on 'SIGINT', ->
-  console.log 'Attempting gracefully shutdown of server'
+ee.on 'tearDown', (ph) ->
+  console.log 'Cleaning phantom process...'
+  ph?.exit()
+  console.log 'Attempting gracefully shutdown of server...'
   server?.close()
   process.exit()
 
