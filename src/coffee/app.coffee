@@ -1,12 +1,14 @@
 EventEmitter = require('events').EventEmitter
 domain = require 'domain'
 express = require 'express'
+Logger = require './logger'
 
 ee = new EventEmitter()
 app = express()
+logger = new Logger()
 
 env = app.get 'env'
-console.log "Node environment: #{env}"
+logger.info "Node environment: #{env}"
 
 port = switch env
   when 'production' then 8888
@@ -28,7 +30,7 @@ app.configure ->
     requestDomain.add(res)
     requestDomain.on 'error', next
     requestDomain.run(next)
-  app.use express.logger()
+  app.use require('./middleware/logger')(logger)
   app.use express.json()
   app.use express.urlencoded()
   app.use express.methodOverride()
@@ -37,10 +39,7 @@ app.configure ->
   app.use app.router
   app.use express.compress()
   app.use (err, req, res, next) ->
-    # TODO: use logger
-    console.log 'Caught exception'
-    console.error err.stack
-    # TODO: use JSON response
+    logger.error err
     res.send 500,
       message: 'Oops, something went wrong!'
 
@@ -49,12 +48,12 @@ require('./routes')(app, port, ee)
 # only start the server if the file is run directly, not when it is required
 if __filename is process.argv[1]
   server = app.listen port
-  console.log "Listening on http://localhost:#{port}/"
+  logger.info "Listening on http://localhost:#{port}/"
 
 ee.on 'tearDown', (ph) ->
-  console.log 'Cleaning phantom process...'
+  logger.info 'Cleaning phantom process...'
   ph?.exit()
-  console.log 'Attempting gracefully shutdown of server...'
+  logger.info 'Attempting gracefully shutdown of server...'
   server?.close()
   process.exit()
 
