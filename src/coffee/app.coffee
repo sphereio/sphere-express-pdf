@@ -5,14 +5,25 @@ Logger = require './logger'
 
 ee = new EventEmitter()
 app = express()
-logger = new Logger()
-
 env = app.get 'env'
-logger.info "Node environment: #{env}"
 
-port = switch env
-  when 'production' then 8888
-  else 3999
+{port, logStream} = switch env
+  when 'production'
+    port: 8888
+    logStream: [
+      {level: 'info', path: './sphere-express-pdf.log'}
+    ]
+  else
+    port: 3999
+    logStream: [
+      {level: 'info', stream: process.stdout}
+    ]
+
+logger = new Logger
+  name: 'sphere-express-pdf'
+  streams: logStream
+
+logger.info "Node environment: #{env}"
 
 ###*
  * Configure express application
