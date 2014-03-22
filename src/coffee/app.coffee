@@ -46,7 +46,7 @@ app.configure ->
   app.use express.urlencoded()
   app.use express.methodOverride()
   app.use express.cookieParser('o4i6XvJXjHF1eQfTpE1E')
-  app.use express.session()
+  app.use express.cookieSession()
   app.use app.router
   app.use express.compress()
   app.use (err, req, res, next) ->
