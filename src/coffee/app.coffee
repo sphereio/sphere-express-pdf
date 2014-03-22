@@ -3,10 +3,10 @@ domain = require 'domain'
 express = require 'express'
 Logger = require './logger'
 
+gracefullyExiting = false
 ee = new EventEmitter()
 app = express()
 env = app.get 'env'
-
 {port, logStream} = switch env
   when 'production'
     port: 8888
@@ -41,6 +41,10 @@ app.configure ->
     requestDomain.add(res)
     requestDomain.on 'error', next
     requestDomain.run(next)
+  app.use (req, res, next) ->
+    return next() unless gracefullyExiting
+    res.setHeader 'Connection', 'close'
+    res.send 502, message: 'Server is in the process of restarting.'
   app.use require('./middleware/logger')(logger)
   app.use express.json()
   app.use express.urlencoded()
@@ -51,21 +55,26 @@ app.configure ->
   app.use express.compress()
   app.use (err, req, res, next) ->
     logger.error err
-    res.send 500,
-      message: 'Oops, something went wrong!'
+    res.send 500, message: 'Oops, something went wrong!'
 
-require('./routes')(app, port, ee)
+require('./routes')(app, ee, logger)
 
 # only start the server if the file is run directly, not when it is required
 if __filename is process.argv[1]
   server = app.listen port
   logger.info "Listening for HTTP on http://localhost:#{port}"
 
+
 ee.on 'tearDown', (ph) ->
-  logger.info 'Cleaning phantom process.'
-  ph?.exit()
-  logger.info 'Attempting gracefully shutdown of server.'
-  server?.close()
-  process.exit()
+  gracefullyExiting = true
+
+  logger.info 'Attempting gracefully shutdown of server, waiting for remaining connections to complete.'
+  setTimeout ->
+    logger.error 'Could not close connections in time, forcefully shutting down.'
+    process.exit(1)
+  , 30 * 1000 # 30s
+  server.close ->
+    logger.info 'No more connections, shutting down server.'
+    process.exit()
 
 module.exports = app

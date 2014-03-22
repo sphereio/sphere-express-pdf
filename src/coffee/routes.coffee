@@ -5,8 +5,10 @@ phantom = require 'phantom'
 pkg = require '../package.json'
 Pdf = require './ws/pdf'
 
-module.exports = (app, port, ee) ->
+module.exports = (app, ee, logger) ->
 
+  _ph = null
+  port = app.get('port')
   baseUrl = "http://localhost:#{port}"
 
   filePath = (name) -> path.join(__dirname, '../tmp', name)
@@ -18,7 +20,7 @@ module.exports = (app, port, ee) ->
 
   createPdf = (payload, cb) ->
     pdf = new Pdf payload
-    pdf.generate @_ph, (tmpFileName) ->
+    pdf.generate _ph, (tmpFileName) ->
       if pdf._options.download
         renderOrDownload = 'download'
       else
@@ -44,7 +46,7 @@ module.exports = (app, port, ee) ->
 
   app.all '*', (req, res, next) ->
     # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
-    if @_ph
+    if _ph
       console.log 'Phantom process already running, skipping...'
       next()
     else
@@ -52,8 +54,8 @@ module.exports = (app, port, ee) ->
         port: (port - 1)
       phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
         phantomOpts
-      , (ph) =>
-        @_ph = ph
+      , (ph) ->
+        _ph = ph
         console.log "New phantom process created on port #{phantomOpts.port}"
         next()
 
@@ -90,5 +92,11 @@ module.exports = (app, port, ee) ->
       downloadPdf(tmpFileName, res)
 
 
-  process.on 'exit', -> ee.emit 'tearDown', @_ph
-  process.on 'SIGINT', -> ee.emit 'tearDown', @_ph
+  handleTearDown = ->
+    if _ph
+      logger.info 'Cleaning phantom process.'
+      _ph.exit()
+    ee.emit 'tearDown'
+  process.on 'exit', handleTearDown
+  process.on 'SIGINT', handleTearDown
+  process.on 'SIGTERM', handleTearDown
