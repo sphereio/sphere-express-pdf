@@ -5,7 +5,7 @@ phantom = require 'phantom'
 pkg = require '../package.json'
 Pdf = require './ws/pdf'
 
-module.exports = (app, ee, logger) ->
+module.exports = (app, logger) ->
 
   _ph = null
   port = app.get('port')
@@ -90,13 +90,3 @@ module.exports = (app, ee, logger) ->
   app.post '/api/pdf/download', (req, res, next) ->
     createPdf req.body, (tmpFileName) ->
       downloadPdf(tmpFileName, res)
-
-
-  handleTearDown = ->
-    if _ph
-      logger.info 'Cleaning phantom process.'
-      _ph.exit()
-    ee.emit 'tearDown'
-  process.on 'exit', handleTearDown
-  process.on 'SIGINT', handleTearDown
-  process.on 'SIGTERM', handleTearDown
