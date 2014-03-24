@@ -14,8 +14,9 @@ module.exports = (hb) ->
       return b
 
   # FORMAT DATE
-  hb.registerHelper "formatDate", (value) ->
-    moment.utc(value).format("LLLL")
+  hb.registerHelper "formatDate", (value, format) ->
+    format = "LLLL" unless _.isString(format)
+    moment.utc(value).format(format)
 
   # VALUEKEY return value for given object key
   hb.registerHelper 'valueKey', (object, key, placeholder) ->
