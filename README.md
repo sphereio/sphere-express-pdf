@@ -9,7 +9,6 @@ Run a Restlet webserver to generate PDFs from HTML, using phantom.js
 > Inspired from [html2pdf.it](https://github.com/Muscula/html2pdf.it)
 
 ## Getting Started
-Install the module with: `npm install sphere-express-pdf`
 
 > Make sure to have [phantom.js](http://phantomjs.org/) installed
 
@@ -52,7 +51,7 @@ There are 2 basic principles regarding the endpoints:
 ##### POST `/api/pdf/url`
 Will generate a PDF based on the given `paylod` data and returns a JSON with a
 link to the PDF.
-> Note that the link will expire after some time
+> Note that the link will **expire** after some time
 
 ```javascript
 // response
@@ -60,7 +59,7 @@ link to the PDF.
   status: 200,
   expires_in: '',
   file: '1234567890.pdf',
-  url: 'http://localhost:3000/api/pdf/render/1234567890.pdf'
+  url: 'http://localhost:3999/api/pdf/render/1234567890.pdf'
 }
 ```
 
@@ -70,15 +69,45 @@ Will generate a PDF based on the given `paylod` data and render it in the browse
 ##### POST `/api/pdf/download`
 Will generate a PDF based on the given `paylod` data and download it
 
-##### GET `/api/pdf/render/:token`
+##### GET `/api/pdf/render/:fileName`
 Will render in the browser the generated PDF, if the token is still valid
 
-##### GET `/api/pdf/download/:token`
+##### GET `/api/pdf/download/:fileName`
 Will download the generated PDF, if the token is still valid
 
 
 ## Examples
-_(Coming soon)_
+
+```json
+{
+  "paperSize": {
+    "format": "A4",
+    "orientation": "portrait",
+    "border": "1cm",
+  },
+  "content": "
+    <html>
+      <head>
+        <meta charset=\"utf-8\">
+        <title>A PDF page</title>
+        <style type=\"text/css\">
+          body { font-family: \"Helvetica New\", Helvetica, Arial, sans-serif; font-size: 12px; }
+          h1 { text-transform: uppercase; }
+        </style>
+      </head>
+      <body>
+        <h1>{{title}}</h1>
+        <h2>{{formatDate createdAt}}</h2>
+      </body>
+    </html>
+  ",
+  "context": {
+    "title": "Hello world",
+    "createdAt": "2014-01-20T19:18:42.940Z"
+  },
+  "download": false
+}
+```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
