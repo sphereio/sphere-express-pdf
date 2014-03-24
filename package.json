@@ -7,7 +7,7 @@
     "name": "Nicola Molinari",
     "email": "nicola.molinari@commercetools.de"
   },
-  "private": false,
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/sphereio/sphere-express-pdf.git"
