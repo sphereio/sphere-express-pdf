@@ -57,8 +57,8 @@ describe 'Functional Spec', ->
       http.get "/api/pdf/render/not-found.pdf"
       .then (result) ->
         expect(result.response.statusCode).toBe 404
-        expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
-        expect(result.body.message).toBe 'File not found'
+        expect(result.response.headers['content-type']).toBe 'text/plain'
+        expect(result.body).toBe 'Not Found'
         done()
       .fail (error) -> done(error)
 
@@ -82,8 +82,8 @@ describe 'Functional Spec', ->
       http.get "/api/pdf/download/not-found.pdf"
       .then (result) ->
         expect(result.response.statusCode).toBe 404
-        expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
-        expect(result.body.message).toBe 'File not found'
+        expect(result.response.headers['content-type']).toBe 'text/plain'
+        expect(result.body).toBe 'Not Found'
         done()
       .fail (error) -> done(error)
 

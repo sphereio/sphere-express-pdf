@@ -26,9 +26,8 @@ module.exports = (app, logger) ->
     requestedPath = filePath(fileName)
     fs.readFile requestedPath, (err, data) ->
       if err
-        msg = "File #{fileName} not found"
-        logger.warn msg
-        res.send 404, message: msg
+        logger.warn "File #{fileName} not found"
+        res.send 404
       else
         cb(data)
 
