@@ -77,8 +77,13 @@ module.exports = (grunt) ->
       options:
         port: 3000
         showStack: true
-      default:
+      run:
         options:
+          node_env: 'development'
+          script: 'lib/app.js'
+      test:
+        options:
+          node_env: 'test'
           script: "lib/app.js"
 
     shell:
@@ -119,10 +124,10 @@ module.exports = (grunt) ->
 
   # register tasks
   grunt.registerTask 'default', ['run']
-  grunt.registerTask 'run', ['build', 'express', 'watch:run']
+  grunt.registerTask 'run', ['build', 'express:run', 'watch:run']
   grunt.registerTask 'build', ['clean', 'coffeelint', 'coffee', 'concat']
-  grunt.registerTask 'test', ['build', 'express', 'shell:jasmine']
-  grunt.registerTask 'coverage', ['build', 'express', 'shell:coverage']
+  grunt.registerTask 'test', ['build', 'express:test', 'shell:jasmine']
+  grunt.registerTask 'coverage', ['build', 'express:test', 'shell:coverage']
   grunt.registerTask 'release', 'Release a new version, push it and publish it', (target) ->
     target = 'patch' unless target
     grunt.task.run "bump-only:#{target}", 'test', 'bump-commit', 'shell:publish'

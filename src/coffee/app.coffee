@@ -13,6 +13,11 @@ env = app.get 'env'
     logStream: [
       {level: 'info', path: './sphere-express-pdf.log'}
     ]
+  when 'test'
+    port: 3999
+    logStream: [
+      {level: 'warn', stream: process.stdout}
+    ]
   else
     port: 3999
     logStream: [
