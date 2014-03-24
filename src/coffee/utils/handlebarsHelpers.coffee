@@ -1,3 +1,4 @@
+_ = require 'underscore'
 moment = require 'moment'
 
 module.exports = (hb) ->
@@ -52,7 +53,7 @@ module.exports = (hb) ->
       return options.inverse(this)
 
     if options.data
-      data = Handlebars.createFrame(options.data)
+      data = hb.createFrame(options.data)
 
     if context and _.isArray context
       found = _.find(context, (o) -> o[key] is value)
