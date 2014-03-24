@@ -1,6 +1,7 @@
 _ = require 'underscore'
 fs = require 'fs'
 path = require 'path'
+crypto = require 'crypto'
 Handlebars = require 'handlebars'
 
 FORMATS = ['A3', 'A4', 'A5', 'Legal', 'Letter', 'Tabloid']
@@ -25,23 +26,24 @@ class Pdf
       download: false
 
   generate: (ph, cb) ->
-    # TODO: generate long unique token
-    timestamp = new Date().getTime()
-    tmpFileName = "#{timestamp}.pdf"
-    tmpFilePath = path.join(__dirname, '../../tmp', tmpFileName)
-
-    # compile
-    html = Handlebars.compile(@_options.content)(@_options.context)
-
     @_page = null
     try
+      timestamp = new Date().getTime() # ensure it's unique
+      randomToken = crypto.randomBytes(32).toString('hex')
+      tmpFileName = "#{timestamp}-#{randomToken}.pdf"
+      tmpFilePath = path.join(__dirname, '../../tmp', tmpFileName)
+
+      # compile
+      html = Handlebars.compile(@_options.content)(@_options.context)
+
       ph.createPage (page) =>
         @_page = page
         page.set 'paperSize', @_options.paperSize
         page.setContent html, '', (status) =>
           @logger.debug "Content set to page with status: #{status}"
-          page.render tmpFilePath, ->
+          page.render tmpFilePath, =>
             page.close()
+            @logger.info "New PDF generated: #{tmpFileName}"
             cb(tmpFileName)
     catch e
       @_page?.close()

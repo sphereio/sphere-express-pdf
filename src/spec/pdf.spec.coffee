@@ -8,6 +8,13 @@ describe 'Pdf generator', ->
 
   beforeEach (done) ->
     @expectedPath = null
+    @logger =
+      trace: ->
+      debug: ->
+      info: ->
+      warn: ->
+      error: ->
+      fatal: ->
     phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
       port: 1111
     , (ph) =>
@@ -23,7 +30,7 @@ describe 'Pdf generator', ->
         done()
 
   it 'should generate pdf', (done) ->
-    pdf = new Pdf testData
+    pdf = new Pdf @logger, testData
     pdf.generate @_ph, (tmpFileName) =>
       @expectedPath = path.join(__dirname, '../tmp', tmpFileName)
       fs.readFile @expectedPath, 'utf-8', (err, data) ->
