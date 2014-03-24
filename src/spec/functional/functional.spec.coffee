@@ -8,12 +8,18 @@ describe 'Functional Spec', ->
 
   RANDOM_TOKEN = uuid.v4()
 
+  checkCORSHeaders = (res) ->
+    expect(res.headers['access-control-allow-origin']).toBe '*'
+    expect(res.headers['access-control-allow-headers']).toBe '*'
+    expect(res.headers['access-control-allow-methods']).toBe 'GET, POST'
+
   createPdf = (http, data = testData) ->
     d = Q.defer()
     http.post '/api/pdf/url', data
     .then (result) ->
       expect(result.response.statusCode).toBe 200
       expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
+      checkCORSHeaders(result.response)
       expect(result.body.status).toBe 200
       expect(result.body.expires_in).toBe '???'
       expect(result.body.file).toMatch /(.*).pdf/
@@ -29,6 +35,7 @@ describe 'Functional Spec', ->
       .then (result) ->
         expect(result.response.statusCode).toBe 200
         expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
+        checkCORSHeaders(result.response)
         expect(result.body.name).toBe 'sphere-express-pdf'
         done()
       .fail (error) -> done(error)
@@ -49,6 +56,7 @@ describe 'Functional Spec', ->
       .then (result) ->
         expect(result.response.statusCode).toBe 200
         expect(result.response.headers['content-type']).toBe 'application/pdf'
+        checkCORSHeaders(result.response)
         expect(result.body).toBeDefined()
         done()
       .fail (error) -> done(error)
@@ -58,6 +66,7 @@ describe 'Functional Spec', ->
       .then (result) ->
         expect(result.response.statusCode).toBe 404
         expect(result.response.headers['content-type']).toBe 'text/plain'
+        checkCORSHeaders(result.response)
         expect(result.body).toBe 'Not Found'
         done()
       .fail (error) -> done(error)
@@ -74,6 +83,7 @@ describe 'Functional Spec', ->
         expect(result.response.statusCode).toBe 200
         expect(result.response.headers['content-type']).toBe 'application/pdf'
         expect(result.response.headers['content-disposition']).toBe "attachment; filename=\"#{name}\""
+        checkCORSHeaders(result.response)
         expect(result.body).toBeDefined()
         done()
       .fail (error) -> done(error)
@@ -83,6 +93,7 @@ describe 'Functional Spec', ->
       .then (result) ->
         expect(result.response.statusCode).toBe 404
         expect(result.response.headers['content-type']).toBe 'text/plain'
+        checkCORSHeaders(result.response)
         expect(result.body).toBe 'Not Found'
         done()
       .fail (error) -> done(error)
@@ -94,6 +105,7 @@ describe 'Functional Spec', ->
       .then (result) ->
         expect(result.response.statusCode).toBe 200
         expect(result.response.headers['content-type']).toBe 'application/pdf'
+        checkCORSHeaders(result.response)
         expect(result.body).toBeDefined()
         done()
       .fail (error) -> done(error)
@@ -106,6 +118,7 @@ describe 'Functional Spec', ->
         expect(result.response.statusCode).toBe 200
         expect(result.response.headers['content-type']).toBe 'application/pdf'
         expect(result.response.headers['content-disposition']).toBe "attachment; filename=\"#{name}\""
+        checkCORSHeaders(result.response)
         expect(result.body).toBeDefined()
         done()
       .fail (error) -> done(error)

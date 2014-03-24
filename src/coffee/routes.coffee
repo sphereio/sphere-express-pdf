@@ -42,6 +42,10 @@ module.exports = (app, logger) ->
 
   app.all '*', (req, res, next) ->
     # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
+    res.header 'Access-Control-Allow-Origin', '*'
+    res.header 'Access-Control-Allow-Headers', '*'
+    res.header 'Access-Control-Allow-Methods', 'GET, POST'
+
     if _ph
       logger.info 'Phantom process already running, skipping...'
       next()
