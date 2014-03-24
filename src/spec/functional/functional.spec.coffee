@@ -21,7 +21,7 @@ describe 'Functional Spec', ->
       expect(result.response.headers['content-type']).toBe 'application/json; charset=utf-8'
       checkCORSHeaders(result.response)
       expect(result.body.status).toBe 200
-      expect(result.body.expires_in).toBe '???'
+      expect(result.body.expires_in).toBe 1800
       expect(result.body.file).toMatch /(.*).pdf/
       expect(result.body.url).toMatch /http\:\/\/localhost\:3999\/api\/pdf\/(render|download)\/(.*).pdf/
       d.resolve result.body.file

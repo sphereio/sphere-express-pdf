@@ -68,7 +68,7 @@ module.exports = (app, logger) ->
     createPdf req.body, (tmpFileName, renderOrDownload) ->
       res.json
         status: 200
-        expires_in: '???'
+        expires_in: 60 * 30 # 30 min
         file: tmpFileName
         # TODO: define baseUrl pro environment
         url: "#{baseUrl}/api/pdf/#{renderOrDownload}/#{tmpFileName}"
