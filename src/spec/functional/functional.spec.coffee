@@ -40,7 +40,7 @@ describe 'Functional Spec', ->
       .then (filename) -> done()
       .fail (error) -> done(error)
 
-  describe ":: GET /api/pdf/render/:token", ->
+  describe ":: GET /api/pdf/render/:fileName", ->
 
     it 'should render pdf', (done) ->
       createPdf helper.http
@@ -62,7 +62,7 @@ describe 'Functional Spec', ->
         done()
       .fail (error) -> done(error)
 
-  describe ":: GET /api/pdf/download/:token", ->
+  describe ":: GET /api/pdf/download/:fileName", ->
 
     it 'should download pdf', (done) ->
       name = null

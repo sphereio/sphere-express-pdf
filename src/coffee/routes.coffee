@@ -70,12 +70,12 @@ module.exports = (app, logger) ->
         url: "#{baseUrl}/api/pdf/#{renderOrDownload}/#{tmpFileName}"
 
   # render existing pdf in the browser
-  app.get '/api/pdf/render/:token', (req, res, next) ->
-    renderPdf(req.param('token'), res)
+  app.get '/api/pdf/render/:fileName', (req, res, next) ->
+    renderPdf(req.param('fileName'), res)
 
   # download existing pdf
-  app.get '/api/pdf/download/:token', (req, res, next) ->
-    downloadPdf(req.param('token'), res)
+  app.get '/api/pdf/download/:fileName', (req, res, next) ->
+    downloadPdf(req.param('fileName'), res)
 
   # generate and render pdf in the browser
   app.post '/api/pdf/render', (req, res, next) ->
