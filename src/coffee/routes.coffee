@@ -8,18 +8,13 @@ Pdf = require './ws/pdf'
 module.exports = (app, logger) ->
 
   _ph = null
-  port = app.get('port')
+  port = app.get 'port'
   baseUrl = "http://localhost:#{port}"
 
   filePath = (name) -> path.join(__dirname, '../tmp', name)
 
-  notFound = (err, res) ->
-    console.log "File not found: #{err}"
-    res.send 404,
-      message: 'File not found'
-
   createPdf = (payload, cb) ->
-    pdf = new Pdf payload
+    pdf = new Pdf logger, payload
     pdf.generate _ph, (tmpFileName) ->
       if pdf._options.download
         renderOrDownload = 'download'
@@ -31,7 +26,9 @@ module.exports = (app, logger) ->
     requestedPath = filePath(fileName)
     fs.readFile requestedPath, (err, data) ->
       if err
-        notFound(err, res)
+        msg = "File #{fileName} not found"
+        logger.warn msg
+        res.send 404, message: msg
       else
         cb(data)
 
@@ -47,7 +44,7 @@ module.exports = (app, logger) ->
   app.all '*', (req, res, next) ->
     # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
     if _ph
-      console.log 'Phantom process already running, skipping...'
+      logger.info 'Phantom process already running, skipping...'
       next()
     else
       phantomOpts =
@@ -56,7 +53,7 @@ module.exports = (app, logger) ->
         phantomOpts
       , (ph) ->
         _ph = ph
-        console.log "New phantom process created on port #{phantomOpts.port}"
+        logger.info "New phantom process created on port #{phantomOpts.port}"
         next()
 
   # homepage

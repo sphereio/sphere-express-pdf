@@ -11,7 +11,8 @@ require('../utils/handlebarsHelpers')(Handlebars)
 
 class Pdf
 
-  constructor: (options = {}) ->
+  constructor: (@logger, options = {}) ->
+    # TODO: validate paper size options
     @_options = _.defaults options,
       paperSize:
         format: 'A4'
@@ -24,7 +25,7 @@ class Pdf
       download: false
 
   generate: (ph, cb) ->
-    # generate random name / token
+    # TODO: generate long unique token
     timestamp = new Date().getTime()
     tmpFileName = "#{timestamp}.pdf"
     tmpFilePath = path.join(__dirname, '../../tmp', tmpFileName)
@@ -36,15 +37,9 @@ class Pdf
     try
       ph.createPage (page) =>
         @_page = page
-        # paperConfig = _.extend {}, @_options.paperSize,
-        #   header:
-        #     height: '1cm'
-        #     contents: '<h1>This is an HEADER</h1>'
-        # console.log paperConfig
         page.set 'paperSize', @_options.paperSize
-
-        page.setContent html, '', (status) ->
-          console.log status
+        page.setContent html, '', (status) =>
+          @logger.debug "Content set to page with status: #{status}"
           page.render tmpFilePath, ->
             page.close()
             cb(tmpFileName)
