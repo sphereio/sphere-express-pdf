@@ -5,3 +5,4 @@ test
 .coveralls.yml
 coverage
 tmp
+*.siege
