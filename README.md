@@ -128,6 +128,36 @@ Will download the generated PDF, if the token is still valid
 }
 ```
 
+## Cleanup expired PDFs
+By default PDFs are stored into `./tmp` folder but are not removed automatically.
+There is a `clean.sh` script available that checks for expired PDFs (**30min**) and optionally remove them.
+
+```bash
+# check
+$ ./bin/clean.sh
+
+Found 3 expired PDFs
+1395745335088-e97e7060da8196e1a58016637f86f80c385546edbc30f8540a8bdd8d99fcc4de.pdf
+1395745341238-b5712ca71084f0690f5183f30de752c97b04891d3e22106ee1ecccf2218347ae.pdf
+1395745341256-38eaa42514c503c64034249e239ad1a76be227af2c0d6573f6d759f96c303850.pdf
+To remove the expired files pass the option -d
+
+# check and remove
+$ ./bin/clean.sh -d
+
+Found 3 expired PDFs
+Removing 1395745335088-e97e7060da8196e1a58016637f86f80c385546edbc30f8540a8bdd8d99fcc4de.pdf...done!
+Removing 1395745341238-b5712ca71084f0690f5183f30de752c97b04891d3e22106ee1ecccf2218347ae.pdf...done!
+Removing 1395745341256-38eaa42514c503c64034249e239ad1a76be227af2c0d6573f6d759f96c303850.pdf...done!
+```
+
+You can setup a cronjob to have this automatically executed
+
+```bash
+$ crontab -e
+*/5 * * * * /path/to/script/clean.sh
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 More info [here](CONTRIBUTING.md)
