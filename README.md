@@ -24,6 +24,25 @@ $ npm start
 $ grunt run # will watch for changes and keep the server alive
 ```
 
+To run it on **production** set the environment
+
+```bash
+$ NODE_ENV=production npm start
+```
+
+You can also pipe the logs (pretty printed) with `bunyan`
+
+```bash
+$ npm start | bunyan -o short
+
+> sphere-express-pdf@0.1.0 start /Users/nicola/dev/src/sphere-express-pdf
+> node ./lib/app.js
+
+11:02:04.039Z  INFO sphere-express-pdf: Starting express application on port 3999 (development)
+11:02:04.260Z  INFO sphere-express-pdf: Listening for HTTP on http://localhost:3999
+...
+```
+
 ## Documentation
 The webserver started by express.js offers some JSON endpoints to work with PDFs.
 There are 2 basic principles regarding the endpoints:
@@ -49,7 +68,7 @@ There are 2 basic principles regarding the endpoints:
 ### API
 
 ##### POST `/api/pdf/url`
-Will generate a PDF based on the given `paylod` data and returns a JSON with a
+Will generate a PDF based on the given `payload` data and returns a JSON with a
 link to the PDF.
 > Note that the link will **expire** after some time
 
@@ -64,10 +83,10 @@ link to the PDF.
 ```
 
 ##### POST `/api/pdf/render`
-Will generate a PDF based on the given `paylod` data and render it in the browser
+Will generate a PDF based on the given `payload` data and render it in the browser
 
 ##### POST `/api/pdf/download`
-Will generate a PDF based on the given `paylod` data and download it
+Will generate a PDF based on the given `payload` data and download it
 
 ##### GET `/api/pdf/render/:fileName`
 Will render in the browser the generated PDF, if the token is still valid
