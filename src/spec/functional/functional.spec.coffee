@@ -10,8 +10,8 @@ describe 'Functional Spec', ->
 
   checkCORSHeaders = (res) ->
     expect(res.headers['access-control-allow-origin']).toBe '*'
-    expect(res.headers['access-control-allow-headers']).toBe '*'
-    expect(res.headers['access-control-allow-methods']).toBe 'GET, POST'
+    expect(res.headers['access-control-allow-headers']).toBe 'Accept, Content-Type, Origin'
+    expect(res.headers['access-control-allow-methods']).toBe 'GET, POST, OPTIONS'
 
   createPdf = (http, data = testData) ->
     d = Q.defer()

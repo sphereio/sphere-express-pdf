@@ -57,6 +57,14 @@ app.configure ->
     requestDomain.on 'error', next
     requestDomain.run(next)
   app.use (req, res, next) ->
+    res.header 'Access-Control-Allow-Origin', '*'
+    res.header 'Access-Control-Allow-Methods', 'GET, POST, OPTIONS'
+    res.header 'Access-Control-Allow-Headers', 'Accept, Content-Type, Origin'
+    if req.method is 'OPTIONS'
+      res.send 200
+    else
+      next()
+  app.use (req, res, next) ->
     return next() unless gracefullyExiting
     res.setHeader 'Connection', 'close'
     res.send 502, message: 'Server is in the process of restarting.'
