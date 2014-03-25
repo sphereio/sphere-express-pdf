@@ -47,7 +47,7 @@ module.exports = (app, logger) ->
     res.header 'Access-Control-Allow-Methods', 'GET, POST'
 
     if _ph
-      logger.info 'Phantom process already running, skipping...'
+      logger.debug 'Phantom process already running, skipping...'
       next()
     else
       phantomOpts =
