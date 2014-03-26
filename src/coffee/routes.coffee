@@ -9,8 +9,7 @@ module.exports = (app, logger) ->
 
   _ph = null
   port = app.get 'port'
-  baseUrl = "http://localhost:#{port}"
-
+  
   filePath = (name) -> path.join(__dirname, '../tmp', name)
 
   createPdf = (payload, cb) ->
@@ -67,8 +66,7 @@ module.exports = (app, logger) ->
         status: 200
         expires_in: 60 * 30 # 30 min
         file: tmpFileName
-        # TODO: define baseUrl pro environment
-        url: "#{baseUrl}/api/pdf/#{renderOrDownload}/#{tmpFileName}"
+        url: "#{app.get('baseUrl')}/api/pdf/#{renderOrDownload}/#{tmpFileName}"
 
   # render existing pdf in the browser
   app.get '/api/pdf/render/:fileName', (req, res, next) ->

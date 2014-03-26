@@ -7,14 +7,16 @@ gracefullyExiting = false
 
 app = express()
 env = app.get 'env'
-{port, logStream} = switch env
+{port, baseUrl, logStream} = switch env
   when 'production'
     port: 8888
+    baseUrl: 'https://pdf.sphere.io'
     logStream: [
       {level: 'info', path: '/var/log/sphere-express-pdf.log'}
     ]
   else
     port: 3999
+    baseUrl: 'http://localhost:3999'
     logStream: [
       {level: 'info', stream: process.stdout}
     ]
@@ -50,6 +52,7 @@ process.on 'SIGTERM', handleTearDown
 ###
 app.configure ->
   app.set 'port', port
+  app.set 'baseUrl', baseUrl
   app.enable 'trust proxy'
   app.use (req, res, next) ->
     requestDomain = domain.create()
