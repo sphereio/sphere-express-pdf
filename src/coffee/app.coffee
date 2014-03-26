@@ -50,6 +50,7 @@ process.on 'SIGTERM', handleTearDown
 ###
 app.configure ->
   app.set 'port', port
+  app.enable 'trust proxy'
   app.use (req, res, next) ->
     requestDomain = domain.create()
     requestDomain.add(req)
