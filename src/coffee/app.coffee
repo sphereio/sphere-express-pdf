@@ -87,5 +87,7 @@ require('./routes')(app, logger)
 if __filename is process.argv[1]
   server = app.listen port
   logger.info "Listening for HTTP on http://localhost:#{port}"
+else
+  logger.debug "Module is being required, skipping server start..."
 
 module.exports = app
