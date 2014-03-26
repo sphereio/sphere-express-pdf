@@ -11,7 +11,7 @@ env = app.get 'env'
   when 'production'
     port: 8888
     logStream: [
-      {level: 'info', path: '/var/log/sphere-express-pdf/log'}
+      {level: 'info', path: '/var/log/sphere-express-pdf.log'}
     ]
   else
     port: 3999
