@@ -12,7 +12,7 @@ env = app.get 'env'
     port: 8888
     baseUrl: 'https://pdf.sphere.io'
     logStream: [
-      {level: 'info', path: '/var/log/sphere-express-pdf.log'}
+      {level: 'info', path: '/var/log/sphere-express-pdf/log'}
     ]
   else
     port: 3999
