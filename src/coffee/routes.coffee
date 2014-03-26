@@ -8,8 +8,9 @@ Pdf = require './ws/pdf'
 module.exports = (app, logger) ->
 
   _ph = null
+  _phIsStarting = false
   port = app.get 'port'
-  
+
   filePath = (name) -> path.join(__dirname, '../tmp', name)
 
   createPdf = (payload, cb) ->
@@ -40,18 +41,18 @@ module.exports = (app, logger) ->
       res.download filePath(fileName), fileName
 
   app.all '*', (req, res, next) ->
-    # req.connection.setTimeout(2 * 60 * 1000) # two minute timeout
-
     if _ph
       logger.debug 'Phantom process already running, skipping...'
       next()
-    else
+    else unless _phIsStarting
+      _phIsStarting = true
       phantomOpts =
         port: (port - 1)
       phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
         phantomOpts
       , (ph) ->
         _ph = ph
+        _phIsStarting = false
         logger.info "New phantom process created on port #{phantomOpts.port}"
         next()
 
