@@ -1,3 +1,4 @@
+require('strong-agent').profile()
 domain = require 'domain'
 express = require 'express'
 Logger = require './logger'
