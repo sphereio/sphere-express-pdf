@@ -43,6 +43,43 @@ $ npm start | bunyan -o short
 ...
 ```
 
+### StrongOps support
+If you would like to monitor your application there is a default support for [StrongOps](http://strongloop.com/node-js-performance/strongops/) monitoring.
+
+Install the `slc` command-line tool (optional, but strongly recommended)
+
+```bash
+$ npm install -g strong-cli
+```
+
+You can enable profiling by either:
+- use a `strongloop.json` configuration file
+- set `ENV` variables before running the app
+
+```bash
+SL_KEY=<API_KEY> SL_APP_NAME=sphere-express-pdf node lib/app.js |bunyan -o short
+
+strong-agent profiling app 'sphere-express-pdf' pid '38855'
+strong-agent dashboard is at https://strongops.strongloop.com
+12:07:01.297Z  INFO sphere-express-pdf: Starting express application on port 3999 (development)
+12:07:01.428Z  INFO sphere-express-pdf: Listening for HTTP on http://localhost:3999
+```
+
+If you don't setup monitoring, the app still works, you will just see this output when starting the server
+
+```bash
+$ node lib/app.js |bunyan -o short
+
+strong-agent not profiling, configuration not found.
+Generate configuration with:
+    npm install -g strong-cli
+    slc strongops
+See http://docs.strongloop.com/strong-agent for more information.
+12:07:01.297Z  INFO sphere-express-pdf: Starting express application on port 3999 (development)
+12:07:01.428Z  INFO sphere-express-pdf: Listening for HTTP on http://localhost:3999
+```
+
+
 ## Documentation
 The webserver started by express.js offers some JSON endpoints to work with PDFs.
 There are 2 basic principles regarding the endpoints:
