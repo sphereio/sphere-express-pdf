@@ -74,6 +74,7 @@ app.configure ->
     res.setHeader 'Connection', 'close'
     res.send 502, message: 'Server is in the process of restarting.'
   app.use require('./middleware/logger')(logger)
+  app.use '/', express.static("#{__dirname}/../public")
   app.use express.json()
   app.use express.urlencoded()
   app.use express.methodOverride()
