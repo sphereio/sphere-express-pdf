@@ -66,7 +66,7 @@ module.exports = (grunt) ->
     watch:
       run:
         files: ['Gruntfile.coffee', 'src/**/*.coffee']
-        tasks: ['build', 'express']
+        tasks: ['build', 'express:run']
         options:
           spawn: false # Without this option specified express won't be reloaded
       test:
