@@ -57,7 +57,7 @@ You can enable profiling by either:
 - set `ENV` variables before running the app
 
 ```bash
-SL_KEY=<API_KEY> SL_APP_NAME=sphere-express-pdf node lib/app.js |bunyan -o short
+SL_KEY=<API_KEY> SL_APP_NAME=sphere-express-pdf slc run |bunyan -o short
 
 strong-agent profiling app 'sphere-express-pdf' pid '38855'
 strong-agent dashboard is at https://strongops.strongloop.com
@@ -65,19 +65,7 @@ strong-agent dashboard is at https://strongops.strongloop.com
 12:07:01.428Z  INFO sphere-express-pdf: Listening for HTTP on http://localhost:3999
 ```
 
-If you don't setup monitoring, the app still works, you will just see this output when starting the server
-
-```bash
-$ node lib/app.js |bunyan -o short
-
-strong-agent not profiling, configuration not found.
-Generate configuration with:
-    npm install -g strong-cli
-    slc strongops
-See http://docs.strongloop.com/strong-agent for more information.
-12:07:01.297Z  INFO sphere-express-pdf: Starting express application on port 3999 (development)
-12:07:01.428Z  INFO sphere-express-pdf: Listening for HTTP on http://localhost:3999
-```
+> If you don't setup monitoring, the app still works
 
 
 ## Documentation
