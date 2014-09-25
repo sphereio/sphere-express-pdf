@@ -27,18 +27,18 @@ module.exports = (app, logger) ->
     fs.readFile requestedPath, (err, data) ->
       if err
         logger.warn "File #{fileName} not found"
-        res.send 404
+        res.status(404).send "File #{fileName} not found"
       else
         cb(data)
 
   renderPdf = (fileName, res) ->
     loadPdf fileName, res, (data) ->
       res.type 'application/pdf'
-      res.send data
+      res.status(200).send data
 
   downloadPdf = (fileName, res) ->
     loadPdf fileName, res, (data) ->
-      res.download filePath(fileName), fileName
+      res.status(200).download filePath(fileName), fileName
 
   app.all '*', (req, res, next) ->
     if _ph
@@ -58,12 +58,12 @@ module.exports = (app, logger) ->
 
   # homepage
   app.get '/', (req, res, next) ->
-    res.json _.omit pkg, 'devDependencies'
+    res.status(200).json _.omit pkg, 'devDependencies'
 
   # retrieve a link to the generated pdf
   app.post '/api/pdf/url', (req, res, next) ->
     createPdf req.body, (tmpFileName, renderOrDownload) ->
-      res.json
+      res.status(200).json
         status: 200
         expires_in: 60 * 30 # 30 min
         file: tmpFileName

@@ -65,9 +65,9 @@ describe 'Functional Spec', ->
       http.get "/api/pdf/render/not-found.pdf"
       .then (result) ->
         expect(result.response.statusCode).toBe 404
-        expect(result.response.headers['content-type']).toBe 'text/plain'
+        expect(result.response.headers['content-type']).toBe 'text/html; charset=utf-8'
         checkCORSHeaders(result.response)
-        expect(result.body).toBe 'Not Found'
+        expect(result.body).toBe 'File not-found.pdf not found'
         done()
       .fail (error) -> done(error)
 
@@ -92,9 +92,9 @@ describe 'Functional Spec', ->
       http.get "/api/pdf/download/not-found.pdf"
       .then (result) ->
         expect(result.response.statusCode).toBe 404
-        expect(result.response.headers['content-type']).toBe 'text/plain'
+        expect(result.response.headers['content-type']).toBe 'text/html; charset=utf-8'
         checkCORSHeaders(result.response)
-        expect(result.body).toBe 'Not Found'
+        expect(result.body).toBe 'File not-found.pdf not found'
         done()
       .fail (error) -> done(error)
 
