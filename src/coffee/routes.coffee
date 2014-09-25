@@ -40,21 +40,28 @@ module.exports = (app, logger) ->
     loadPdf fileName, res, (data) ->
       res.status(200).download filePath(fileName), fileName
 
+
+
   app.all '*', (req, res, next) ->
     if _ph
       logger.debug 'Phantom process already running, skipping...'
       next()
     else unless _phIsStarting
-      _phIsStarting = true
-      phantomOpts =
-        port: (port - 1)
-      phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
-        phantomOpts
-      , (ph) ->
-        _ph = ph
-        _phIsStarting = false
-        logger.info "New phantom process created on port #{phantomOpts.port}"
-        next()
+      createPhantomProcess = ->
+        _phIsStarting = true
+        phantomOpts =
+          port: (port - 1)
+          onExit: ->
+            logger.error 'Phantom process exited unexpectedly or crashed. Will try to spawn up a new process...'
+            createPhantomProcess()
+        phantom.create "--web-security=no", "--ignore-ssl-errors=yes",
+          phantomOpts
+        , (ph) ->
+          _ph = ph
+          _phIsStarting = false
+          logger.info "New phantom process created on port #{phantomOpts.port}"
+          next()
+      createPhantomProcess()
 
   # homepage
   app.get '/', (req, res, next) ->
