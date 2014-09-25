@@ -65,7 +65,7 @@ module.exports = (app, logger) ->
 
   # homepage
   app.get '/', (req, res, next) ->
-    res.status(200).json _.omit pkg, 'devDependencies'
+    res.status(200).json _.pick(pkg, 'name', 'description', 'version', 'homepage', 'author', 'repository', 'bugs')
 
   # retrieve a link to the generated pdf
   app.post '/api/pdf/url', (req, res, next) ->
