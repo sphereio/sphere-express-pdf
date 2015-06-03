@@ -1,4 +1,3 @@
-require('strong-agent').profile()
 path = require 'path'
 domain = require 'domain'
 express = require 'express'

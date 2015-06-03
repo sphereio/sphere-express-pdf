@@ -78,11 +78,11 @@ module.exports = (app, logger) ->
 
   # render existing pdf in the browser
   app.get '/api/pdf/render/:fileName', (req, res, next) ->
-    renderPdf(req.param('fileName'), res)
+    renderPdf(req.params.fileName, res)
 
   # download existing pdf
   app.get '/api/pdf/download/:fileName', (req, res, next) ->
-    downloadPdf(req.param('fileName'), res)
+    downloadPdf(req.params.fileName, res)
 
   # generate and render pdf in the browser
   app.post '/api/pdf/render', (req, res, next) ->
