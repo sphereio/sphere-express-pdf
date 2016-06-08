@@ -14,6 +14,11 @@ Run a Restlet webserver to generate PDFs from HTML, using phantom.js
 
 ```bash
 $ brew install phantom
+
+# or
+
+$ npm i -g phantomjs-prebuilt
+$ npm rebuild
 ```
 
 Start the webserver

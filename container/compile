@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir /var/log/sphere-express-pdf
+
+npm config set registry http://registry.npmjs.org/
+npm i --unsafe-perm --no-optional
+npm run build
+
+# This is necessary in order to ensure the correct
+# native binaries of phantomjs
+npm rebuild

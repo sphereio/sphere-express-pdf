@@ -16,7 +16,9 @@ env = app.get 'env'
     port: 8888
     baseUrl: 'https://pdf.sphere.io'
     logStream: [
-      {level: 'info', path: "/var/log/#{pkg.name}/log"}
+      if process.env.APP_ENV is 'docker'
+      then {level: 'info', stream: process.stdout}
+      else {level: 'info', path: "/var/log/#{pkg.name}/log"}
     ]
   else
     port: 3999

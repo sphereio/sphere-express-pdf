@@ -1,0 +1,7 @@
+coverage
+data
+logs
+test
+tmp
+.npmignore
+.travis.yml
