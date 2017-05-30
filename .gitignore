@@ -4,6 +4,7 @@ lib
 test
 .coveralls.yml
 coverage
+logs
 tmp
 *.siege
 strongloop.json

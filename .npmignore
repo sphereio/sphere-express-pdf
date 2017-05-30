@@ -2,6 +2,7 @@ node_modules
 *.log
 src
 test
+logs
 data
 coverage
 .travis.yml
